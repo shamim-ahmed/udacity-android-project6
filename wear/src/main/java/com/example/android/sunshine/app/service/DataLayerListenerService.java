@@ -13,14 +13,14 @@ import android.util.Log;
 
 import com.example.android.sunshine.app.CustomWatchFaceApplication;
 import com.example.android.sunshine.app.task.ReadForecastDataTask;
+import com.example.android.sunshine.app.util.WearableConstants;
 
 /**
  * Created by shamim on 5/15/16.
  */
 public class DataLayerListenerService extends WearableListenerService implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-    private static final String TAG = "MainActivity";
-    private static final String FORECAST_PATH = "/forecast";
+    private static final String TAG = DataLayerListenerService.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -45,18 +45,18 @@ public class DataLayerListenerService extends WearableListenerService implements
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "onConnected(): Successfully connected to Google API client");
+        Log.i(TAG, "onConnected: Successfully connected to Google API client");
         Wearable.DataApi.addListener(mGoogleApiClient, this);
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.i(TAG, "onConnectionSuspended(): Connection to Google API client was suspended");
+        Log.w(TAG, "onConnectionSuspended: Connection to Google API client was suspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.e(TAG, "onConnectionFailed(): Failed to connect, with result: " + result);
+        Log.e(TAG, "onConnectionFailed: Failed to connect, with result: " + result);
     }
 
     @Override
@@ -66,11 +66,13 @@ public class DataLayerListenerService extends WearableListenerService implements
         for (DataEvent event : dataEvents) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 String path = event.getDataItem().getUri().getPath();
-                if (FORECAST_PATH.equals(path)) {
-                    Log.i(TAG, "Data Changed for FORECAST_PATH");
+
+                if (WearableConstants.FORECAST_PATH.equals(path)) {
+                    Log.i(TAG, String.format("Data Changed for path: %s", WearableConstants.FORECAST_PATH));
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                     CustomWatchFaceApplication application = (CustomWatchFaceApplication) getApplication();
 
+                    // start the background task that parses the data and stores it in application class
                     ReadForecastDataTask task = new ReadForecastDataTask(application, mGoogleApiClient);
                     task.execute(dataMapItem);
                 } else {

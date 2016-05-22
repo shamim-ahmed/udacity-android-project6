@@ -41,31 +41,21 @@ public class ReadForecastDataTask extends AsyncTask<DataMapItem, Void, Map<Strin
         }
 
         if (params.length < 1) {
-            Log.w(TAG, "no DataMapItem provided");
             return Collections.emptyMap();
         }
 
         DataMapItem dataMapItem = params[0];
-        String forecastData = dataMapItem.getDataMap().get("forecast");
-        Log.i(TAG, "forecast received : " + forecastData);
+        String forecastData = dataMapItem.getDataMap().get(WearableConstants.FORECAST_KEY);
+        Log.i(TAG, String.format("forecast received : %s", forecastData));
 
+        // parse json to get forecast data
         Map<String, Object> forecastMap = parseForecastData(forecastData);
 
-        // TODO proper NPE check
-        Asset asset = dataMapItem.getDataMap().getAsset("icon");
-        Log.i(TAG, "the asset received is : " + asset);
-
-        InputStream inStream = Wearable.DataApi.getFdForAsset(googleApiClient, asset).await().getInputStream();
-
-        if (inStream == null) {
-            Log.w(TAG, "cannot retrieve inputStream for asset");
-            return Collections.emptyMap();
-        }
-
-        Bitmap bitmap = BitmapFactory.decodeStream(inStream);
+        // retrieve the bitmap for icon
+        Bitmap bitmap = retrieveBitmap(dataMapItem);
 
         if (bitmap != null) {
-            forecastMap.put(WearableConstants.ICON_BITMAP_KEY, bitmap);
+            forecastMap.put(WearableConstants.ICON_KEY, bitmap);
         }
 
         return forecastMap;
@@ -73,7 +63,6 @@ public class ReadForecastDataTask extends AsyncTask<DataMapItem, Void, Map<Strin
 
     @Override
     protected void onPostExecute(Map<String, Object> resultMap)  {
-        Log.i(TAG, "storing the received bitmap...");
         application.setForecastDataMap(resultMap);
     }
 
@@ -82,7 +71,7 @@ public class ReadForecastDataTask extends AsyncTask<DataMapItem, Void, Map<Strin
 
         try {
             JSONObject jsonObject = new JSONObject(inputStr);
-
+            resultMap.put(WearableConstants.SUMMARY_KEY, jsonObject.getString(WearableConstants.SUMMARY_KEY));
             resultMap.put(WearableConstants.TEMPERATURE_HIGH_KEY, jsonObject.getString(WearableConstants.TEMPERATURE_HIGH_KEY));
             resultMap.put(WearableConstants.TEMPERATURE_LOW_KEY, jsonObject.getString(WearableConstants.TEMPERATURE_LOW_KEY));
         } catch (Exception ex) {
@@ -90,5 +79,17 @@ public class ReadForecastDataTask extends AsyncTask<DataMapItem, Void, Map<Strin
         }
 
         return resultMap;
+    }
+
+    private Bitmap retrieveBitmap(DataMapItem dataMapItem) {
+        Asset asset = dataMapItem.getDataMap().getAsset(WearableConstants.ICON_KEY);
+        InputStream inStream = Wearable.DataApi.getFdForAsset(googleApiClient, asset).await().getInputStream();
+
+        if (inStream == null) {
+            Log.w(TAG, "cannot retrieve inputStream for asset");
+            return null;
+        }
+
+        return BitmapFactory.decodeStream(inStream);
     }
 }

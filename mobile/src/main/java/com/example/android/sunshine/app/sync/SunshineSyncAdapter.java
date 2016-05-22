@@ -1,5 +1,8 @@
 package com.example.android.sunshine.app.sync;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
@@ -36,6 +39,9 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
+import com.example.android.sunshine.app.util.CustomConnectionCallbackListener;
+import com.example.android.sunshine.app.util.MobileConstants;
+import com.example.android.sunshine.app.util.SendDataTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +55,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -87,8 +95,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
+    private GoogleApiClient googleApiClient;
+
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        initializeGoogleApiClient();
     }
 
     @Override
@@ -182,6 +193,18 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         return;
     }
+
+    private void initializeGoogleApiClient() {
+        CustomConnectionCallbackListener connectionListener = new CustomConnectionCallbackListener();
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(Wearable.API)
+                .addConnectionCallbacks(connectionListener)
+                .addOnConnectionFailedListener(connectionListener)
+                .build();
+
+        googleApiClient.connect();
+    }
+
 
     /**
      * Take the String representing the complete forecast in JSON Format and
@@ -489,7 +512,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         String locationQuery = Utility.getPreferredLocation(context);
         Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
 
-        // we'll query our contentProvider, as always
         Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
 
         if (cursor != null) {
@@ -497,7 +519,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 int weatherId = cursor.getInt(INDEX_WEATHER_ID);
                 double high = cursor.getDouble(INDEX_MAX_TEMP);
                 double low = cursor.getDouble(INDEX_MIN_TEMP);
-                String desc = cursor.getString(INDEX_SHORT_DESC);
+                String summary = cursor.getString(INDEX_SHORT_DESC);
 
                 // Retrieve the large icon
                 Resources resources = context.getResources();
@@ -507,7 +529,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 String highTemperatureStr = Utility.formatTemperature(context, high);
                 String lowTemperatureStr = Utility.formatTemperature(context, low);
 
-                Log.i("shamim", "info : " + desc + ", " + highTemperatureStr + ", " + lowTemperatureStr + ", " + weatherIcon);
+                Map<String, Object> forecastDataMap = new HashMap<>();
+                forecastDataMap.put(MobileConstants.SUMMARY_KEY, summary);
+                forecastDataMap.put(MobileConstants.TEMPERATURE_HIGH_KEY, highTemperatureStr);
+                forecastDataMap.put(MobileConstants.TEMPERATURE_LOW_KEY, lowTemperatureStr);
+                forecastDataMap.put(MobileConstants.ICON_KEY, weatherIcon);
+
+                SendDataTask task = new SendDataTask(googleApiClient, forecastDataMap);
+                task.execute();
             }
 
             cursor.close();

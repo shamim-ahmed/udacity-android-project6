@@ -226,7 +226,7 @@ public class CustomWatchFaceService extends CanvasWatchFaceService {
         private void displayForecastInfo(Canvas canvas) {
             CustomWatchFaceApplication application = (CustomWatchFaceApplication) getApplication();
             Map<String, Object> forecastDataMap = application.getForecastDataMap();
-            Bitmap bitmap = (Bitmap) forecastDataMap.get(WearableConstants.ICON_BITMAP_KEY);
+            Bitmap bitmap = (Bitmap) forecastDataMap.get(WearableConstants.ICON_KEY);
             String highTempStr = (String) forecastDataMap.get(WearableConstants.TEMPERATURE_HIGH_KEY);
             String lowTempStr = (String) forecastDataMap.get(WearableConstants.TEMPERATURE_LOW_KEY);
 
