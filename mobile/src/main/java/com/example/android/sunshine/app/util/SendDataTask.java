@@ -36,7 +36,7 @@ public class SendDataTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         if (!googleApiClient.isConnected()) {
-            Log.i(TAG, "client not connected...");
+            Log.i(TAG, "Google api client not connected...");
             return null;
         }
 
@@ -55,8 +55,7 @@ public class SendDataTask extends AsyncTask<Void, Void, Void> {
         }
 
         PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-        // TODO FIX THIS
-        //putDataRequest.setUrgent();
+        putDataRequest.setUrgent();
 
         Log.i(TAG, "data is being sent...");
 
