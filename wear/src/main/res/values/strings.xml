@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SunshineApp</string>
-    <string name="hello_round">Hello Round World!</string>
-    <string name="hello_square">Hello Square World!</string>
+    <string name="app_name">Android-WatchFace-demo</string>
+    <string name="my_analog_name">My Analog</string>
+    <string name="forecast_watchface_name">Custom Forecast WatchFace</string>
 </resources>
