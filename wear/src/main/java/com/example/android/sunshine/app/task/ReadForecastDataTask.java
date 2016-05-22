@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.task;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Asset;
@@ -9,6 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.util.WearableConstants;
 
 import org.json.JSONObject;
 

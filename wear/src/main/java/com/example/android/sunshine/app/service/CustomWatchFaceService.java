@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +19,11 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
+
+import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.util.DateFormatUtil;
+import com.example.android.sunshine.app.util.WearableConstants;
 
 import java.util.Map;
 import java.util.TimeZone;

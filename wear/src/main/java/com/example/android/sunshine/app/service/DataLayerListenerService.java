@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.service;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -10,6 +10,9 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.task.ReadForecastDataTask;
 
 /**
  * Created by shamim on 5/15/16.

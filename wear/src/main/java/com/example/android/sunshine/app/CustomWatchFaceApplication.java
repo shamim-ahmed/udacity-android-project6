@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.android.sunshine.app.service.DataLayerListenerService;
+import com.example.android.sunshine.app.util.WearableConstants;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

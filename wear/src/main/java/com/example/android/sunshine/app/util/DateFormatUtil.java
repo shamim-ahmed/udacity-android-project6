@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

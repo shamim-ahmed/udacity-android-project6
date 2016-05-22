@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.util;
 
 /**
  * Created by shamim on 5/16/16.
