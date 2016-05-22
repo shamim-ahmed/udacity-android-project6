@@ -10,7 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.SunshineWatchFaceApplication;
 import com.example.android.sunshine.app.util.WearableConstants;
 
 import org.json.JSONObject;
@@ -25,10 +25,10 @@ import java.util.Map;
  */
 public class ReadForecastDataTask extends AsyncTask<DataMapItem, Void, Map<String, Object>> {
     private static final String TAG = ReadForecastDataTask.class.getSimpleName();
-    private final CustomWatchFaceApplication application;
+    private final SunshineWatchFaceApplication application;
     private final GoogleApiClient googleApiClient;
 
-    public ReadForecastDataTask(CustomWatchFaceApplication application, GoogleApiClient googleApiClient) {
+    public ReadForecastDataTask(SunshineWatchFaceApplication application, GoogleApiClient googleApiClient) {
         this.application = application;
         this.googleApiClient = googleApiClient;
     }

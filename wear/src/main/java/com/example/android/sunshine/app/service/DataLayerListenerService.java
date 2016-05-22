@@ -11,7 +11,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.SunshineWatchFaceApplication;
 import com.example.android.sunshine.app.task.ReadForecastDataTask;
 import com.example.android.sunshine.app.util.WearableConstants;
 
@@ -70,7 +70,7 @@ public class DataLayerListenerService extends WearableListenerService implements
                 if (WearableConstants.FORECAST_PATH.equals(path)) {
                     Log.i(TAG, String.format("Data Changed for path: %s", WearableConstants.FORECAST_PATH));
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    CustomWatchFaceApplication application = (CustomWatchFaceApplication) getApplication();
+                    SunshineWatchFaceApplication application = (SunshineWatchFaceApplication) getApplication();
 
                     // start the background task that parses the data and stores it in application class
                     ReadForecastDataTask task = new ReadForecastDataTask(application, mGoogleApiClient);

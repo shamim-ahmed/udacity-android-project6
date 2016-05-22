@@ -11,8 +11,8 @@ import java.util.Map;
 /**
  * Created by shamim on 5/15/16.
  */
-public class CustomWatchFaceApplication extends Application {
-    private static final String TAG = CustomWatchFaceApplication.class.getSimpleName();
+public class SunshineWatchFaceApplication extends Application {
+    private static final String TAG = SunshineWatchFaceApplication.class.getSimpleName();
     private Map<String, Object> forecastDataMap = Collections.emptyMap();
 
     public synchronized Map<String, Object> getForecastDataMap() {

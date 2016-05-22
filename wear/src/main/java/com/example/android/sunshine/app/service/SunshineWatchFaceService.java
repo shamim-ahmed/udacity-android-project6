@@ -20,7 +20,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
-import com.example.android.sunshine.app.CustomWatchFaceApplication;
+import com.example.android.sunshine.app.SunshineWatchFaceApplication;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.util.DateFormatUtil;
 import com.example.android.sunshine.app.util.WearableConstants;
@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class CustomWatchFaceService extends CanvasWatchFaceService {
-    private static final String TAG = CustomWatchFaceService.class.getSimpleName();
+public class SunshineWatchFaceService extends CanvasWatchFaceService {
+    private static final String TAG = SunshineWatchFaceService.class.getSimpleName();
 
     @Override
     public Engine onCreateEngine() {
@@ -94,7 +94,7 @@ public class CustomWatchFaceService extends CanvasWatchFaceService {
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
 
-            setWatchFaceStyle(new WatchFaceStyle.Builder(CustomWatchFaceService.this)
+            setWatchFaceStyle(new WatchFaceStyle.Builder(SunshineWatchFaceService.this)
                             .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                             .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
                             .setShowSystemUiTime(false)
@@ -125,7 +125,7 @@ public class CustomWatchFaceService extends CanvasWatchFaceService {
                 if (!mHasTimeZoneReceiverBeenRegistered) {
 
                     IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-                    CustomWatchFaceService.this.registerReceiver(mTimeZoneBroadcastReceiver, filter);
+                    SunshineWatchFaceService.this.registerReceiver(mTimeZoneBroadcastReceiver, filter);
 
                     mHasTimeZoneReceiverBeenRegistered = true;
                 }
@@ -134,7 +134,7 @@ public class CustomWatchFaceService extends CanvasWatchFaceService {
                 mDisplayTime.setToNow();
             } else {
                 if (mHasTimeZoneReceiverBeenRegistered) {
-                    CustomWatchFaceService.this.unregisterReceiver(mTimeZoneBroadcastReceiver);
+                    SunshineWatchFaceService.this.unregisterReceiver(mTimeZoneBroadcastReceiver);
                     mHasTimeZoneReceiverBeenRegistered = false;
                 }
             }
@@ -224,7 +224,7 @@ public class CustomWatchFaceService extends CanvasWatchFaceService {
         }
 
         private void displayForecastInfo(Canvas canvas) {
-            CustomWatchFaceApplication application = (CustomWatchFaceApplication) getApplication();
+            SunshineWatchFaceApplication application = (SunshineWatchFaceApplication) getApplication();
             Map<String, Object> forecastDataMap = application.getForecastDataMap();
             Bitmap bitmap = (Bitmap) forecastDataMap.get(WearableConstants.ICON_KEY);
             String highTempStr = (String) forecastDataMap.get(WearableConstants.TEMPERATURE_HIGH_KEY);
