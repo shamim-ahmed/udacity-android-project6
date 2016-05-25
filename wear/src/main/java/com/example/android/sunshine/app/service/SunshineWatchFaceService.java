@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
@@ -29,6 +28,8 @@ import com.example.android.sunshine.app.util.DateFormatUtil;
 import com.example.android.sunshine.app.util.WearableConstants;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +43,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
     // update rate in ms for interactive mode
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
 
-    // Handler message id for updating the displayTime periodically in interactive mode.
+    // Handler message id for updating the calendar periodically in interactive mode.
     private static final int MSG_UPDATE_TIME = 0;
 
     private Typeface WATCH_TEXT_TYPEFACE = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
@@ -69,11 +70,11 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         }
     }
 
-    private class WatchFaceEngine extends CustomWatchFaceService.Engine {
+    private class WatchFaceEngine extends Engine {
         private final Handler updateTimeHandler = new EngineHandler(this);
         private boolean registeredTimeZoneReceiver = false;
         private boolean lowBitAmbient;
-        private Time displayTime;
+        private Calendar calendar;
 
         private int backgroundColor;
         private int timeColor;
@@ -94,8 +95,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         private final BroadcastReceiver timeZoneReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                displayTime.clear(intent.getStringExtra("time-zone"));
-                displayTime.setToNow();
+                calendar = Calendar.getInstance(TimeZone.getTimeZone(intent.getStringExtra("time-zone")));
             }
         };
 
@@ -129,8 +129,8 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             iconPaint = new Paint();
             iconPaint.setAntiAlias(true);
 
-            // initialize the time
-            displayTime = new Time();
+            // initialize the calendar with default timezone
+            calendar = Calendar.getInstance();
         }
 
         @Override
@@ -207,7 +207,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             super.onDraw(canvas, bounds);
             Log.i(TAG, "onDraw is invoked");
 
-            displayTime.setToNow();
+            calendar.setTime(new Date());
 
             // draw the background
             canvas.drawRect(0, 0, bounds.width(), bounds.height(), backgroundPaint);
@@ -222,8 +222,8 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
             if (visible) {
                 registerReceiver();
-                displayTime.clear(TimeZone.getDefault().getID());
-                displayTime.setToNow();
+                calendar.setTimeZone(TimeZone.getDefault());
+                calendar.setTime(new Date());
             } else {
                 unregisterReceiver();
             }
@@ -242,8 +242,8 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         }
 
         private void drawTimeAndDate(Canvas canvas) {
-            String timeText = String.format("%02d:%02d", displayTime.hour, displayTime.minute);
-            String dateText = DateFormatUtil.generateDateString();
+            String timeText = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+            String dateText = DateFormatUtil.generateDateString(calendar.getTime());
             canvas.drawText(timeText, xOffset, yOffset, timePaint);
             canvas.drawText(dateText, xOffset - 20, yOffset + 35, datePaint);
         }
