@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Android-WatchFace-demo</string>
-    <string name="my_analog_name">My Analog</string>
-    <string name="forecast_watchface_name">Custom Forecast WatchFace</string>
+    <string name="app_name">Sunshine-Wearable</string>
+    <string name="forecast_watchface_name">Sunshine WatchFace</string>
 </resources>

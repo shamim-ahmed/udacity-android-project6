@@ -241,10 +241,10 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         }
 
         private void drawTimeAndDate(Canvas canvas) {
-            String timeText = displayTime.hour + ":" + String.format("%02d", displayTime.minute);
+            String timeText = String.format("%02d:%02d", displayTime.hour, displayTime.minute);
             String dateText = DateFormatUtil.generateDateString();
             canvas.drawText(timeText, xOffset, yOffset, timePaint);
-            canvas.drawText(dateText, xOffset - 15, yOffset + 35, datePaint);
+            canvas.drawText(dateText, xOffset - 20, yOffset + 35, datePaint);
         }
 
         private void drawForecastInfo(Canvas canvas) {
