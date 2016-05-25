@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -66,14 +67,17 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         }
     }
 
-
     private class WatchFaceEngine extends CustomWatchFaceService.Engine {
         private final Handler updateTimeHandler = new EngineHandler(this);
         private boolean registeredTimeZoneReceiver = false;
-        private boolean ambient;
         private boolean lowBitAmbient;
         private Time displayTime;
-        private int tapCount;
+
+        private int backgroundColor;
+        private int timeColor;
+        private int dateColor;
+        private int highTemperatureColor;
+        private int lowTemperatureColor;
 
         private Paint backgroundPaint;
         private Paint timePaint;
@@ -88,7 +92,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         private final BroadcastReceiver timeZoneReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                displayTime.clear(intent.getStringExtra("displayTime-zone"));
+                displayTime.clear(intent.getStringExtra("time-zone"));
                 displayTime.setToNow();
             }
         };
@@ -106,13 +110,14 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
             // initialize all paint objects
             Resources resources = getResources();
+            backgroundColor = resources.getColor(R.color.background);
             backgroundPaint = new Paint();
-            backgroundPaint.setColor(resources.getColor(R.color.background));
+            backgroundPaint.setColor(backgroundColor);
 
-            int timeColor = resources.getColor(R.color.time_color);
-            int dateColor = resources.getColor(R.color.date_color);
-            int highTemperatureColor = resources.getColor(R.color.high_temperature_color);
-            int lowTemperatureColor = resources.getColor(R.color.low_temperature_color);
+            timeColor = resources.getColor(R.color.time_color);
+            dateColor = resources.getColor(R.color.date_color);
+            highTemperatureColor = resources.getColor(R.color.high_temperature_color);
+            lowTemperatureColor = resources.getColor(R.color.low_temperature_color);
 
             timePaint = createTextPaint(timeColor, R.dimen.time_text_size);
             datePaint = createTextPaint(dateColor, R.dimen.date_text_size);
@@ -148,19 +153,28 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         public void onAmbientModeChanged(boolean inAmbientMode) {
             super.onAmbientModeChanged(inAmbientMode);
 
-            if (ambient != inAmbientMode) {
-                ambient = inAmbientMode;
-
-                if (lowBitAmbient) {
-                    timePaint.setAntiAlias(!inAmbientMode);
-                    datePaint.setAntiAlias(!inAmbientMode);
-                    highTemperaturePaint.setAntiAlias(!inAmbientMode);
-                    lowTemperaturePaint.setAntiAlias(!inAmbientMode);
-                }
-
-                invalidate();
+            if (inAmbientMode) {
+                backgroundPaint.setColor(Color.BLACK);
+                timePaint.setColor(Color.WHITE);
+                datePaint.setColor(Color.WHITE);
+                highTemperaturePaint.setColor(Color.WHITE);
+                lowTemperaturePaint.setColor(Color.WHITE);
+            } else {
+                backgroundPaint.setColor(backgroundColor);
+                timePaint.setColor(timeColor);
+                datePaint.setColor(dateColor);
+                highTemperaturePaint.setColor(highTemperatureColor);
+                lowTemperaturePaint.setColor(lowTemperatureColor);
             }
 
+            if (lowBitAmbient) {
+                timePaint.setAntiAlias(!inAmbientMode);
+                datePaint.setAntiAlias(!inAmbientMode);
+                highTemperaturePaint.setAntiAlias(!inAmbientMode);
+                lowTemperaturePaint.setAntiAlias(!inAmbientMode);
+            }
+
+            invalidate();
             updateTimer();
         }
 
@@ -182,6 +196,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
             super.onDraw(canvas, bounds);
+            Log.i(TAG, "onDraw is invoked");
 
             displayTime.setToNow();
 
@@ -190,29 +205,6 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
             drawTimeAndDate(canvas);
             drawForecastInfo(canvas);
-        }
-
-        @Override
-        public void onTapCommand(int tapType, int x, int y, long eventTime) {
-            Resources resources = SunshineWatchFaceService.this.getResources();
-
-            switch (tapType) {
-                case TAP_TYPE_TOUCH:
-                    // The user has started touching the screen.
-                    break;
-                case TAP_TYPE_TOUCH_CANCEL:
-                    // The user has started a different gesture or otherwise cancelled the tap.
-                    break;
-                case TAP_TYPE_TAP: {
-                    // The user has completed the tap gesture.
-                    tapCount++;
-                    int resultColor = tapCount % 2 == 0 ? R.color.alternate_background : R.color.background;
-                    backgroundPaint.setColor(resources.getColor(resultColor));
-                    break;
-                }
-            }
-
-            invalidate();
         }
 
         @Override
