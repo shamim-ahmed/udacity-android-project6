@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -157,14 +159,20 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 backgroundPaint.setColor(Color.BLACK);
                 timePaint.setColor(Color.WHITE);
                 datePaint.setColor(Color.WHITE);
-                highTemperaturePaint.setColor(Color.WHITE);
-                lowTemperaturePaint.setColor(Color.WHITE);
+                highTemperaturePaint.setColor(Color.BLACK);
+                lowTemperaturePaint.setColor(Color.BLACK);
+
+                ColorFilter filter = new LightingColorFilter(Color.BLACK, 0);
+                iconPaint.setColorFilter(filter);
             } else {
                 backgroundPaint.setColor(backgroundColor);
                 timePaint.setColor(timeColor);
                 datePaint.setColor(dateColor);
                 highTemperaturePaint.setColor(highTemperatureColor);
                 lowTemperaturePaint.setColor(lowTemperatureColor);
+
+                ColorFilter filter = new LightingColorFilter(Color.WHITE, 0);
+                iconPaint.setColorFilter(filter);
             }
 
             if (lowBitAmbient) {
@@ -172,6 +180,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 datePaint.setAntiAlias(!inAmbientMode);
                 highTemperaturePaint.setAntiAlias(!inAmbientMode);
                 lowTemperaturePaint.setAntiAlias(!inAmbientMode);
+                iconPaint.setAntiAlias(!inAmbientMode);
             }
 
             invalidate();
@@ -249,10 +258,7 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             // draw the separator
             canvas.drawLine(xOffset + 50, yOffset + 60, xOffset + 100, yOffset + 60, lowTemperaturePaint);
 
-            if (bitmap == null) {
-                // TODO draw a default icon
-                Log.i(TAG, "no icon found");
-            } else {
+            if (bitmap != null) {
                 // draw the provided icon
                 Log.i(TAG, "drawing the icon");
                 Rect rect = new Rect();
