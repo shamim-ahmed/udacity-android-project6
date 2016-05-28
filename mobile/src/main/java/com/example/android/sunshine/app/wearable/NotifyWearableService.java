@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app.util;
+package com.example.android.sunshine.app.wearable;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
@@ -16,6 +16,7 @@ import android.util.Log;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
+import com.example.android.sunshine.app.util.MobileConstants;
 
 import java.util.HashMap;
 import java.util.Map;

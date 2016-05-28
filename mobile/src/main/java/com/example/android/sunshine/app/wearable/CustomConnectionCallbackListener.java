@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app.util;
+package com.example.android.sunshine.app.wearable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
