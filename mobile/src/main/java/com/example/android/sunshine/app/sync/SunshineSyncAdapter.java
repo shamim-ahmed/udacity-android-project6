@@ -36,6 +36,7 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
+import com.example.android.sunshine.app.wearable.NotifyWearableService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -351,11 +352,21 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
             setLocationStatus(getContext(), LOCATION_STATUS_OK);
 
+            // notify the wearable device
+            notifyWearable();
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
             setLocationStatus(getContext(), LOCATION_STATUS_SERVER_INVALID);
         }
+    }
+
+    private void notifyWearable() {
+        Log.i(LOG_TAG, "Attempting to notify wearable device after successful sync...");
+
+        Context context = getContext();
+        Intent service = new Intent(context, NotifyWearableService.class);
+        context.startService(service);
     }
 
     private void updateWidgets() {
