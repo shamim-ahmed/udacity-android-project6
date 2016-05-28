@@ -22,31 +22,31 @@ public class DataLayerListenerService extends WearableListenerService implements
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = DataLayerListenerService.class.getSimpleName();
 
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient googleApiClient;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-        mGoogleApiClient.connect();
+        googleApiClient.connect();
 
         Log.i(TAG, "DataLayerListenerService initialized successfully");
     }
 
     @Override
     public void onDestroy() {
-        mGoogleApiClient.disconnect();
+        googleApiClient.disconnect();
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "onConnected: Successfully connected to Google API client");
-        Wearable.DataApi.addListener(mGoogleApiClient, this);
+        Wearable.DataApi.addListener(googleApiClient, this);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DataLayerListenerService extends WearableListenerService implements
                     SunshineWatchFaceApplication application = (SunshineWatchFaceApplication) getApplication();
 
                     // start the background task that parses the data and stores it in application class
-                    ReadForecastDataTask task = new ReadForecastDataTask(application, mGoogleApiClient);
+                    ReadForecastDataTask task = new ReadForecastDataTask(application, googleApiClient);
                     task.execute(dataMapItem);
                 } else {
                     Log.w(TAG, "Unrecognized path: " + path);
