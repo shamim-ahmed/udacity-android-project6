@@ -27,6 +27,7 @@ import android.view.WindowInsets;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.SunshineWatchFaceApplication;
 import com.example.android.sunshine.app.util.DateFormatUtil;
+import com.example.android.sunshine.app.util.StringUtils;
 import com.example.android.sunshine.app.util.WearableConstants;
 
 import java.lang.ref.WeakReference;
@@ -208,7 +209,6 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
             super.onDraw(canvas, bounds);
-            Log.i(TAG, "onDraw is invoked");
 
             calendar.setTime(new Date());
 
@@ -270,25 +270,24 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             int separatorDelY = (int) resources.getDimension(R.dimen.separator_del_y);
             canvas.drawLine(xOffset + separatorStartDelX, yOffset + separatorDelY, xOffset + separatorEndDelX, yOffset + separatorDelY, lowTemperaturePaint);
 
+            // draw the provided icon
+            int iconSize = (int) resources.getDimension(R.dimen.icon_size);
+            int iconDelX = (int) resources.getDimension(R.dimen.icon_del_x);
+            int iconDelY = (int) resources.getDimension(R.dimen.icon_del_y);
+            int x = (int) xOffset + iconDelX;
+            int y = (int) yOffset + iconDelY;
+
             if (bitmap != null) {
-                // draw the provided icon
-                Log.i(TAG, "drawing the icon");
-                int iconDelX = (int) resources.getDimension(R.dimen.icon_del_x);
-                int iconDelY = (int) resources.getDimension(R.dimen.icon_del_y);
                 Rect rect = new Rect();
-                int x = (int) xOffset + iconDelX;
-                int y = (int) yOffset + iconDelY;
-
-                int iconSize = (int) resources.getDimension(R.dimen.icon_size);
-
                 rect.set(x, y, x + iconSize, y + iconSize);
                 canvas.drawBitmap(bitmap, null, rect, iconPaint);
+            }
 
+            // draw temperature info
+            if (StringUtils.isNotBlank(highTempStr) && StringUtils.isNotBlank(lowTempStr)) {
                 int tempDelY = (int) resources.getDimension(R.dimen.temp_del_y);
                 int highTempDelX = (int) resources.getDimension(R.dimen.high_temp_del_x);
                 int lowTempDelX = (int) resources.getDimension(R.dimen.low_temp_del_x);
-
-                // draw temperature info
                 canvas.drawText(highTempStr, x + highTempDelX, y + tempDelY, highTemperaturePaint);
                 canvas.drawText(lowTempStr, x + lowTempDelX, y + tempDelY, lowTemperaturePaint);
             }
