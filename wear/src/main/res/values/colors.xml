@@ -3,7 +3,7 @@
     <color name="background">#0098F8</color>
     <color name="alternate_background">#000000</color>
     <color name="time_color">#FFFFFF</color>
-    <color name="date_color">#7DCBFC</color>
+    <color name="date_color">#A4DBFD</color>
     <color name="high_temperature_color">#FFFFFF</color>
     <color name="low_temperature_color">#A4DBFD</color>
 </resources>
