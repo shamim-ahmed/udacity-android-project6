@@ -15,7 +15,7 @@
     <dimen name="high_temp_del_x">28dp</dimen>
     <dimen name="low_temp_del_x">63dp</dimen>
     <dimen name="temp_del_y">17dp</dimen>
-    <dimen name="icon_size">20dp</dimen>
+    <dimen name="icon_size">23dp</dimen>
     <dimen name="icon_del_x">5dp</dimen>
     <dimen name="icon_del_y">45dp</dimen>
     <dimen name="separator_start_del_x">30dp</dimen>
