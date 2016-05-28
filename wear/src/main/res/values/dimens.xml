@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <dimen name="analog_hand_stroke">3dp</dimen>
     <dimen name="y_offset">80dp</dimen>
-    <dimen name="x_offset_square">30dp</dimen>
+    <dimen name="x_offset_square">42dp</dimen>
     <dimen name="x_offset_round">55dp</dimen>
     <dimen name="time_text_size">40dp</dimen>
     <dimen name="date_text_size">15dp</dimen>
     <dimen name="temperature_text_size">20dp</dimen>
+
+    <!-- the parameters used to specify positions of various UI components in watch face -->
+    <dimen name="date_del_x">10dp</dimen>
+    <dimen name="date_del_y">22dp</dimen>
+    <dimen name="high_temp_del_x">28dp</dimen>
+    <dimen name="low_temp_del_x">63dp</dimen>
+    <dimen name="temp_del_y">17dp</dimen>
+    <dimen name="icon_size">20dp</dimen>
+    <dimen name="icon_del_x">5dp</dimen>
+    <dimen name="icon_del_y">45dp</dimen>
+    <dimen name="separator_start_del_x">35dp</dimen>
+    <dimen name="separator_end_del_x">70dp</dimen>
+    <dimen name="separator_del_y">35dp</dimen>
 </resources>

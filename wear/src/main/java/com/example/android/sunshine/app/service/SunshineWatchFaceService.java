@@ -245,7 +245,11 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             String timeText = String.format("%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
             String dateText = DateFormatUtil.generateDateString(calendar.getTime());
             canvas.drawText(timeText, xOffset, yOffset, timePaint);
-            canvas.drawText(dateText, xOffset - 20, yOffset + 35, datePaint);
+
+            Resources resources = getResources();
+            int dateDelX = (int) resources.getDimension(R.dimen.date_del_x);
+            int dateDelY = (int) resources.getDimension(R.dimen.date_del_y);
+            canvas.drawText(dateText, xOffset - dateDelX, yOffset + dateDelY, datePaint);
         }
 
         private void drawForecastInfo(Canvas canvas) {
@@ -255,22 +259,35 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             String highTempStr = (String) forecastDataMap.get(WearableConstants.TEMPERATURE_HIGH_KEY);
             String lowTempStr = (String) forecastDataMap.get(WearableConstants.TEMPERATURE_LOW_KEY);
 
+            Resources resources = getResources();
+
             // draw the separator
-            canvas.drawLine(xOffset + 50, yOffset + 60, xOffset + 100, yOffset + 60, lowTemperaturePaint);
+            int separatorStartDelX = (int) resources.getDimension(R.dimen.separator_start_del_x);
+            int separatorEndDelX = (int) resources.getDimension(R.dimen.separator_end_del_x);
+            int separatorDelY = (int) resources.getDimension(R.dimen.separator_del_y);
+            canvas.drawLine(xOffset + separatorStartDelX, yOffset + separatorDelY, xOffset + separatorEndDelX, yOffset + separatorDelY, lowTemperaturePaint);
 
             if (bitmap != null) {
                 // draw the provided icon
                 Log.i(TAG, "drawing the icon");
+                int iconDelX = (int) resources.getDimension(R.dimen.icon_del_x);
+                int iconDelY = (int) resources.getDimension(R.dimen.icon_del_y);
                 Rect rect = new Rect();
-                int x = (int) xOffset;
-                int y = (int) yOffset + 75;
+                int x = (int) xOffset + iconDelX;
+                int y = (int) yOffset + iconDelY;
 
-                rect.set(x, y, x + 40, y + 40);
+                int iconSize = (int) resources.getDimension(R.dimen.icon_size);
+
+                rect.set(x, y, x + iconSize, y + iconSize);
                 canvas.drawBitmap(bitmap, null, rect, iconPaint);
 
+                int tempDelY = (int) resources.getDimension(R.dimen.temp_del_y);
+                int highTempDelX = (int) resources.getDimension(R.dimen.high_temp_del_x);
+                int lowTempDelX = (int) resources.getDimension(R.dimen.low_temp_del_x);
+
                 // draw temperature info
-                canvas.drawText(highTempStr, x + 50, y + 30, highTemperaturePaint);
-                canvas.drawText(lowTempStr, x + 105, y + 30, lowTemperaturePaint);
+                canvas.drawText(highTempStr, x + highTempDelX, y + tempDelY, highTemperaturePaint);
+                canvas.drawText(lowTempStr, x + lowTempDelX, y + tempDelY, lowTemperaturePaint);
             }
         }
 
