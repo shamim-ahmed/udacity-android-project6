@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             }
         }
 
+        // start the service that will notify the wearable device
         startNotifyWearableService();
     }
 
