@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.util.Log;
@@ -111,15 +112,15 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                     .build());
 
             // initialize all paint objects
-            Resources resources = getResources();
-            backgroundColor = resources.getColor(R.color.background);
+            Context appContext = getApplicationContext();
+            backgroundColor = ContextCompat.getColor(appContext, R.color.background);
             backgroundPaint = new Paint();
             backgroundPaint.setColor(backgroundColor);
 
-            timeColor = resources.getColor(R.color.time_color);
-            dateColor = resources.getColor(R.color.date_color);
-            highTemperatureColor = resources.getColor(R.color.high_temperature_color);
-            lowTemperatureColor = resources.getColor(R.color.low_temperature_color);
+            timeColor = ContextCompat.getColor(appContext, R.color.time_color);
+            dateColor = ContextCompat.getColor(appContext, R.color.date_color);
+            highTemperatureColor = ContextCompat.getColor(appContext, R.color.high_temperature_color);
+            lowTemperatureColor = ContextCompat.getColor(appContext, R.color.low_temperature_color);
 
             timePaint = createTextPaint(timeColor, R.dimen.time_text_size);
             datePaint = createTextPaint(dateColor, R.dimen.date_text_size);
