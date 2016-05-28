@@ -1,7 +1,6 @@
 package com.example.android.sunshine.app.wearable;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Wearable;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -13,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.android.sunshine.app.SunshineApplication;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -27,34 +27,14 @@ import java.util.Map;
 public class NotifyWearableService extends IntentService {
     private static final String TAG = NotifyWearableService.class.getSimpleName();
 
-    private GoogleApiClient googleApiClient;
-    private ForecastData lastForecastData;
-
     public NotifyWearableService() {
         super(NotifyWearableService.class.getSimpleName());
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initializeGoogleApiClient();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "NotifyWearableService is running...");
         notifyWearDevice();
-    }
-
-    private void initializeGoogleApiClient() {
-        CustomConnectionCallbackListener connectionListener = new CustomConnectionCallbackListener();
-        googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(connectionListener)
-                .addOnConnectionFailedListener(connectionListener)
-                .build();
-
-        googleApiClient.connect();
     }
 
     private void notifyWearDevice() {
@@ -83,6 +63,8 @@ public class NotifyWearableService extends IntentService {
                 String highTemperatureStr = Utility.formatTemperature(context, high);
                 String lowTemperatureStr = Utility.formatTemperature(context, low);
 
+                SunshineApplication application = (SunshineApplication) getApplication();
+                ForecastData lastForecastData =  application.getLastForecastData();
                 ForecastData currentForecastData = new ForecastData(highTemperatureStr, lowTemperatureStr, summary);
 
                 if (lastForecastData != null && lastForecastData.equals(currentForecastData)) {
@@ -98,41 +80,21 @@ public class NotifyWearableService extends IntentService {
                 forecastDataMap.put(MobileConstants.TEMPERATURE_LOW_KEY, lowTemperatureStr);
                 forecastDataMap.put(MobileConstants.ICON_KEY, weatherIcon);
 
+                GoogleApiClient googleApiClient = application.getGoogleApiClient();
+
+                if (googleApiClient == null) {
+                    Log.w(TAG, "Google API client not initialized. No data will be sent to wearable");
+                    return;
+                }
+
                 SendDataTask task = new SendDataTask(googleApiClient, forecastDataMap);
                 task.execute();
 
-                lastForecastData = currentForecastData;
+                // store for future reference
+                application.setLastForecastData(currentForecastData);
             } finally {
                 cursor.close();
             }
-        }
-    }
-
-    private static class ForecastData {
-        private final String highTemperature;
-        private final String lowTemperature;
-        private final String summary;
-
-        public ForecastData(String highTemperature, String lowTemperature, String summary) {
-            if (highTemperature == null || lowTemperature == null || summary == null) {
-                throw new IllegalArgumentException("temperature value or summary cannot be null");
-            }
-
-            this.highTemperature = highTemperature;
-            this.lowTemperature = lowTemperature;
-            this.summary = summary;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof ForecastData)) {
-                return false;
-            }
-
-            ForecastData otherForecast = (ForecastData) obj;
-
-            return highTemperature.equals(otherForecast.highTemperature) && lowTemperature.equals(otherForecast.lowTemperature)
-                    && summary.equals(otherForecast.summary);
         }
     }
 }

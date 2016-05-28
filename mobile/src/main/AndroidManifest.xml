@@ -42,7 +42,7 @@
     <!-- watch face specific permissions -->
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND"/>
 
-    <application
+    <application android:name=".SunshineApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
