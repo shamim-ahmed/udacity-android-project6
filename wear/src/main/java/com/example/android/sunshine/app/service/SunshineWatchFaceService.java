@@ -288,8 +288,9 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
                 int tempDelY = (int) resources.getDimension(R.dimen.temp_del_y);
                 int highTempDelX = (int) resources.getDimension(R.dimen.high_temp_del_x);
                 int lowTempDelX = (int) resources.getDimension(R.dimen.low_temp_del_x);
-                canvas.drawText(highTempStr, x + highTempDelX, y + tempDelY, highTemperaturePaint);
-                canvas.drawText(lowTempStr, x + lowTempDelX, y + tempDelY, lowTemperaturePaint);
+                int marginTop = (int) resources.getDimension(R.dimen.temperature_text_margin_top);
+                canvas.drawText(highTempStr, x + highTempDelX, y + tempDelY + marginTop, highTemperaturePaint);
+                canvas.drawText(lowTempStr, x + lowTempDelX, y + tempDelY + marginTop, lowTemperaturePaint);
             }
         }
 

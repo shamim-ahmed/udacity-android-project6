@@ -7,6 +7,7 @@
     <dimen name="x_offset_round">55dp</dimen>
     <dimen name="time_text_size">40dp</dimen>
     <dimen name="date_text_size">15dp</dimen>
+    <dimen name="temperature_text_margin_top">3dp</dimen>
     <dimen name="temperature_text_size">20dp</dimen>
 
     <!-- the parameters used to specify positions of various UI components in watch face -->
@@ -20,5 +21,5 @@
     <dimen name="icon_del_y">52dp</dimen>
     <dimen name="separator_start_del_x">30dp</dimen>
     <dimen name="separator_end_del_x">70dp</dimen>
-    <dimen name="separator_del_y">38dp</dimen>
+    <dimen name="separator_del_y">40dp</dimen>
 </resources>
