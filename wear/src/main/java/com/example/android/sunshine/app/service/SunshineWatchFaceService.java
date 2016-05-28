@@ -196,12 +196,12 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
 
             Resources resources = getResources();
 
-            yOffset = resources.getDimension(R.dimen.y_offset);
-
             if (insets.isRound()) {
                 xOffset = resources.getDimension(R.dimen.x_offset_round);
+                yOffset = resources.getDimension(R.dimen.y_offset_round);
             } else {
                 xOffset = resources.getDimension(R.dimen.x_offset_square);
+                yOffset = resources.getDimension(R.dimen.y_offset_square);
             }
         }
 
