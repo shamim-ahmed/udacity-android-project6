@@ -4,8 +4,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.example.android.sunshine.app.wearable.CustomConnectionCallbackListener;
+import com.example.android.sunshine.app.wearable.DataLayerListenerService;
 import com.example.android.sunshine.app.wearable.ForecastData;
 
 /**
@@ -19,6 +21,7 @@ public class SunshineApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initializeGoogleApiClient();
+        startService(new Intent(this, DataLayerListenerService.class));
     }
 
     public synchronized GoogleApiClient getGoogleApiClient() {

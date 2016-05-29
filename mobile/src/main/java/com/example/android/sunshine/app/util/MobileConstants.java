@@ -12,6 +12,8 @@ public class MobileConstants {
     public static final String TEMPERATURE_LOW_KEY = "temperature_low";
     public static final String ICON_KEY = "icon";
 
+    public static final String GET_FORECAST_DATA_PATH = "/get-forecast-data";
+
     // private constructor to prevent instantiation
     private MobileConstants() {
     }
