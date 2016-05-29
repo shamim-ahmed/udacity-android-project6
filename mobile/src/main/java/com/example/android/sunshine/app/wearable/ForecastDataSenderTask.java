@@ -24,13 +24,13 @@ import java.util.Map;
 /**
  * Created by shamim on 5/11/16.
  */
-public class SendDataTask extends AsyncTask<Void, Void, Void> {
-    private static final String TAG = SendDataTask.class.getSimpleName();
+public class ForecastDataSenderTask extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = ForecastDataSenderTask.class.getSimpleName();
 
     private final GoogleApiClient googleApiClient;
     private final Map<String, Object> inputMap;
 
-    public SendDataTask(GoogleApiClient googleApiClient, Map<String, Object> inputMap) {
+    public ForecastDataSenderTask(GoogleApiClient googleApiClient, Map<String, Object> inputMap) {
         this.googleApiClient = googleApiClient;
         this.inputMap = inputMap;
     }
@@ -41,6 +41,8 @@ public class SendDataTask extends AsyncTask<Void, Void, Void> {
             Log.i(TAG, "Google api client not connected...");
             return null;
         }
+
+        Log.i(TAG, "Sending forecast data to the wearable device...");
 
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(MobileConstants.FORECAST_PATH);
         DataMap dataMap = putDataMapRequest.getDataMap();
@@ -58,8 +60,6 @@ public class SendDataTask extends AsyncTask<Void, Void, Void> {
 
         PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
         putDataRequest.setUrgent();
-
-        Log.i(TAG, "data is being sent...");
 
         Wearable.DataApi.putDataItem(googleApiClient, putDataRequest).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
             @Override

@@ -30,9 +30,11 @@ public class DataRequestSenderTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         if (!googleApiClient.isConnected()) {
-            Log.i(TAG, "google api client not connected");
+            Log.i(TAG, "Google API client not connected");
             return null;
         }
+
+        Log.i(TAG, "Sending request to mobile app for latest weather data...");
 
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WearableConstants.GET_FORECAST_DATA_PATH);
         DataMap dataMap = putDataMapRequest.getDataMap();

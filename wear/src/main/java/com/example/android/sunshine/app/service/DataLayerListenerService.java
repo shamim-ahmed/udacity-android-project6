@@ -16,6 +16,8 @@ import com.example.android.sunshine.app.task.DataRequestSenderTask;
 import com.example.android.sunshine.app.task.ReadForecastDataTask;
 import com.example.android.sunshine.app.util.WearableConstants;
 
+import java.util.Map;
+
 /**
  * Created by shamim on 5/15/16.
  */
@@ -49,9 +51,15 @@ public class DataLayerListenerService extends WearableListenerService implements
         Log.i(TAG, "onConnected: Successfully connected to Google API client");
         Wearable.DataApi.addListener(googleApiClient, this);
 
-        // send a request for screen initialization with forecast data
-        DataRequestSenderTask task = new DataRequestSenderTask(googleApiClient);
-        task.execute();
+        // check if we have forecast data
+        SunshineWatchFaceApplication application = (SunshineWatchFaceApplication) getApplication();
+        Map<String, Object> dataMap = application.getForecastDataMap();
+
+        if (dataMap == null || dataMap.isEmpty()) {
+            // send a request for screen initialization with forecast data
+            DataRequestSenderTask task = new DataRequestSenderTask(googleApiClient);
+            task.execute();
+        }
     }
 
     @Override

@@ -87,7 +87,7 @@ public class NotifyWearableService extends IntentService {
                     return;
                 }
 
-                SendDataTask task = new SendDataTask(googleApiClient, forecastDataMap);
+                ForecastDataSenderTask task = new ForecastDataSenderTask(googleApiClient, forecastDataMap);
                 task.execute();
 
                 // store for future reference
