@@ -24,10 +24,14 @@ public class SunshineApplication extends Application {
         startService(new Intent(this, DataLayerListenerService.class));
     }
 
+    // this instance of GoogleApiClient is used by NotifyWearableListenerService to send
+    // data to the wearable device. It is stored in global context so that multiple instances
+    // are not created every time the service is invoked.
     public synchronized GoogleApiClient getGoogleApiClient() {
         return googleApiClient;
     }
 
+    // the summary of the last forecast data sent to the wearable
     public synchronized ForecastData getLastForecastData() {
         return lastForecastData;
     }
