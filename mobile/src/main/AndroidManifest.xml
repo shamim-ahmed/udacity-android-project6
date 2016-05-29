@@ -107,8 +107,6 @@
 
         <!-- service that runs in the background and notifies wearable device when a change in weather data is detected -->
         <service android:name=".wearable.NotifyWearableService" android:exported="false"/>
-        <!-- the custom broadcast receiver that invokes NotifyWearableService -->
-        <receiver android:name=".wearable.CustomBroadcastReceiver" android:process=":remote"/>
 
         <!-- The Google Cloud Messaging receiver and services -->
         <receiver

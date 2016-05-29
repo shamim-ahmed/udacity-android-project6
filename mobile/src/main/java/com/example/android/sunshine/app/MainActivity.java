@@ -36,7 +36,6 @@ import android.view.View;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.gcm.RegistrationIntentService;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
-import com.example.android.sunshine.app.wearable.CustomBroadcastReceiver;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-    private static final long WEARABLE_NOTIFICATION_DELAY = 1 * 60 * 1000;
 
     private boolean mTwoPane;
     private String mLocation;
@@ -113,9 +111,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 startService(intent);
             }
         }
-
-        // start the service that will notify the wearable device
-        startNotifyWearableService();
     }
 
     @Override
@@ -204,14 +199,5 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             return false;
         }
         return true;
-    }
-
-    private void startNotifyWearableService() {
-        Intent intent = new Intent(getApplicationContext(), CustomBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, CustomBroadcastReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long currentTime = System.currentTimeMillis();
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, currentTime, WEARABLE_NOTIFICATION_DELAY, pendingIntent);
     }
 }
