@@ -42,13 +42,13 @@ public class ForecastDataSenderTask extends AsyncTask<Void, Void, Void> {
             return null;
         }
 
-        Log.i(TAG, "Sending forecast data to the wearable device...");
-
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(MobileConstants.FORECAST_PATH);
         DataMap dataMap = putDataMapRequest.getDataMap();
 
-        JSONObject forecastData = createJsonObjectFromInputData();
-        dataMap.putString(MobileConstants.FORECAST_KEY, forecastData.toString());
+        String forecastDataStr = createJsonFromInputData();
+        dataMap.putString(MobileConstants.FORECAST_KEY, forecastDataStr);
+
+        Log.i(TAG, String.format("Sending forecast data to the wearable device : %s", forecastDataStr));
 
         // send the forecast icon
         Bitmap bitmap = (Bitmap) inputMap.get(MobileConstants.ICON_KEY);
@@ -75,7 +75,7 @@ public class ForecastDataSenderTask extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    private JSONObject createJsonObjectFromInputData() {
+    private String createJsonFromInputData() {
         JSONObject forecastData = new JSONObject();
 
         String forecastSummary = (String) inputMap.get(MobileConstants.SUMMARY_KEY);
@@ -91,7 +91,7 @@ public class ForecastDataSenderTask extends AsyncTask<Void, Void, Void> {
             Log.e(TAG, "error while constructing json string", ex);
         }
 
-        return forecastData;
+        return forecastData.toString();
     }
 
     private static Asset toAsset(Bitmap bitmap) {
