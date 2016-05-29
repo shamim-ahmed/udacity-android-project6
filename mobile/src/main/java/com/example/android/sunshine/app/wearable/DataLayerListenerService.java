@@ -70,11 +70,11 @@ public class DataLayerListenerService extends WearableListenerService implements
                 if (MobileConstants.GET_FORECAST_DATA_PATH.equals(path)) {
                     Log.i(TAG, String.format("Data Changed for path: %s", MobileConstants.GET_FORECAST_DATA_PATH));
 
-                    // reset last forecast data
+                    // reset last forecast data to force send operation
                     SunshineApplication application = (SunshineApplication) getApplication();
                     application.setLastForecastData(null);
 
-                    // now send the latest forecast data to wearable
+                    // now invoke the service that will send the latest forecast data to wearable
                     Context appContext = getApplicationContext();
                     Intent service = new Intent(appContext, NotifyWearableService.class);
                     appContext.startService(service);

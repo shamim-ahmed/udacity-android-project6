@@ -36,7 +36,6 @@ public class DataRequestSenderTask extends AsyncTask<Void, Void, Void> {
 
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WearableConstants.GET_FORECAST_DATA_PATH);
         DataMap dataMap = putDataMapRequest.getDataMap();
-
         dataMap.putLong(WearableConstants.TIMESTAMP_KEY, new Date().getTime());
 
         PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
