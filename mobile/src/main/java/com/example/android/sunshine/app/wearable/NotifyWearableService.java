@@ -17,6 +17,7 @@ import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.example.android.sunshine.app.util.MobileConstants;
+import com.example.android.sunshine.app.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +63,11 @@ public class NotifyWearableService extends IntentService {
 
                 String highTemperatureStr = Utility.formatTemperature(context, high);
                 String lowTemperatureStr = Utility.formatTemperature(context, low);
+
+                if (StringUtils.isBlank(summary) || StringUtils.isBlank(highTemperatureStr) || StringUtils.isBlank(lowTemperatureStr)) {
+                    Log.w(TAG, "Weather data is incomplete. Wearable device will not be notified.");
+                    return;
+                }
 
                 SunshineApplication application = (SunshineApplication) getApplication();
                 ForecastData lastForecastData =  application.getLastForecastData();

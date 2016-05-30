@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app.wearable;
 
+import com.example.android.sunshine.app.util.StringUtils;
+
 /**
  * Created by shamim on 5/28/16.
  */
@@ -9,8 +11,8 @@ public class ForecastData {
     private final String summary;
 
     public ForecastData(String highTemperature, String lowTemperature, String summary) {
-        if (highTemperature == null || lowTemperature == null || summary == null) {
-            throw new IllegalArgumentException("temperature value or summary cannot be null");
+        if (StringUtils.isBlank(highTemperature) || StringUtils.isBlank(lowTemperature) || StringUtils.isBlank(summary)) {
+            throw new IllegalArgumentException("Temperature value or summary cannot be blank");
         }
 
         this.highTemperature = highTemperature;
